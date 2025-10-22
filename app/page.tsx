@@ -25,6 +25,8 @@ import {
   ClipboardList,
   FileSpreadsheet,
 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -69,7 +71,7 @@ const officeApps = [
 ];
 
 const news = [
-  { title: "Como Gerenciar sua Estratégia Digital", img: "/img/computadores.png" },
+  { title: "Como Gerenciar sua Estratégia Digital", img: "/img/mariciu.png" },
   { title: "Decore seu Home Office!", img: "/image/mariciu.png" },
   { title: "Treinamento Interno - TI", img: "/img/usuarios.png" },
 ];
@@ -78,7 +80,7 @@ export default function Page() {
   const [openMenu, setOpenMenu] = useState(false);
   const [date, setDate] = useState<Value>(new Date());
   const [colaboradores, setColaboradores] = useState<Colaborador[]>([]);
-  const [aniversariantes, setAniversariantes] = useState<Colaborador[]>([]);
+  const [Ramais, setRamais] = useState<Colaborador[]>([]);
   const [selectedDept, setSelectedDept] = useState<"PJ" | "RH" | "SGC">("PJ");
 
   const departamentos = {
@@ -115,6 +117,9 @@ export default function Page() {
     const mockData: Colaborador[] = [
       { id: 1, nome: "Luiz Silva", cargo: "Analista de TI (Estagiário)", foto: "/img/user1.png", data_nascimento: "2004-10-09" },
       { id: 2, nome: "Kevin Markes", cargo: "Analista de TI (Estagiário)", foto: "/img/user2.png", data_nascimento: "2004-05-19" },
+      { id: 2, nome: "Pessoa1", cargo: "Analista de TI (Estagiário)", foto: "/img/user2.png", data_nascimento: "2004-05-19" },
+      { id: 2, nome: "Pessoa2", cargo: "Analista de TI (Estagiário)", foto: "/img/user2.png", data_nascimento: "2004-05-19" },
+      { id: 2, nome: "Pessoa3", cargo: "Analista de TI (Estagiário)", foto: "/img/user2.png", data_nascimento: "2004-05-19" },
     ];
 
     setColaboradores(mockData);
@@ -123,7 +128,7 @@ export default function Page() {
     const dia = hoje.getDate();
     const mes = hoje.getMonth() + 1;
 
-    setAniversariantes(
+    setRamais(
       mockData.filter((c) => {
         const d = new Date(c.data_nascimento);
         return d.getDate() === dia && d.getMonth() + 1 === mes;
@@ -155,6 +160,9 @@ export default function Page() {
               <a href="#" className="hover:text-green-700 transition">Sobre</a>
               <a href="#" className="hover:text-green-700 transition">Contato</a>
             </nav>
+            
+
+
 
             {/* Ícone de login/configuração */}
             <Link href="./login">
@@ -355,13 +363,50 @@ export default function Page() {
           />
         </motion.div>
 
+        {/* Ramais */}
+        <motion.div
+          className="bg-white rounded-lg p-4 shadow"
+          variants={fadeUp}
+          custom={6}
+        >
+          <h4 className="font-semibold text-green-800 mb-3">
+            Lista de Ramais
+          </h4>
+          {Ramais.length > 0 ? (
+            <ul className="space-y-2">
+              {Ramais.map((a) => (
+                <motion.li
+                  key={a.id}
+                  className="flex items-center gap-3 p-2 hover:bg-green-50 rounded-md"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <Image
+                    src={a.foto}
+                    alt={a.nome}
+                    width={40}
+                    height={40}
+                    className="rounded-full object-cover"
+                  />
+                  <div>
+                    <div className="font-medium">{a.nome}</div>
+                    <div className="text-xs text-slate-500">{a.cargo}</div>
+                  </div>
+                </motion.li>
+              ))}
+            </ul>
+          ) : (
+            <div className="text-sm text-slate-500">
+              Nenhum ramal cadastrado
+            </div>
+          )}
+        </motion.div>
         {/* Criadores */}
         <motion.div
           className="bg-white rounded-lg p-4 shadow"
           variants={fadeUp}
           custom={5}
         >
-          <h4 className="font-semibold text-green-800 mb-3">👨‍💻 Criadores</h4>
+          <h4 className="font-semibold text-green-800 mb-3">👨‍💻 Colaboradores</h4>
           <ul className="space-y-2">
             {colaboradores.map((c) => (
               <motion.li
@@ -384,45 +429,8 @@ export default function Page() {
             ))}
           </ul>
         </motion.div>
-
-        {/* Aniversariantes */}
-        <motion.div
-          className="bg-white rounded-lg p-4 shadow"
-          variants={fadeUp}
-          custom={6}
-        >
-          <h4 className="font-semibold text-green-800 mb-3">
-            🎉 Aniversariantes de Hoje
-          </h4>
-          {aniversariantes.length > 0 ? (
-            <ul className="space-y-2">
-              {aniversariantes.map((a) => (
-                <motion.li
-                  key={a.id}
-                  className="flex items-center gap-3 p-2 hover:bg-green-50 rounded-md"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <Image
-                    src={a.foto}
-                    alt={a.nome}
-                    width={40}
-                    height={40}
-                    className="rounded-full object-cover"
-                  />
-                  <div>
-                    <div className="font-medium">{a.nome}</div>
-                    <div className="text-xs text-slate-500">{a.cargo}</div>
-                  </div>
-                </motion.li>
-              ))}
-            </ul>
-          ) : (
-            <div className="text-sm text-slate-500">
-              Nenhum aniversariante hoje 🎂
-            </div>
-          )}
-        </motion.div>
       </motion.aside>
     </motion.main>
   </div>
+
 )}
